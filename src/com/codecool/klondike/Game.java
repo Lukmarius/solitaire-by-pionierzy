@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,10 +22,15 @@ public class Game extends Pane {
 
     private List<Card> deck = new ArrayList<>();
 
+    // Piles
     private Pile stockPile;
     private Pile discardPile;
     private List<Pile> foundationPiles = FXCollections.observableArrayList();
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
+
+    // Number of piles
+    private static final int FOUNDATIONS = Suit.values().length;
+    private static final int TABLEAUS = 7;
 
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
@@ -93,7 +99,8 @@ public class Game extends Pane {
     }
 
     public Game() {
-        deck = Card.createNewDeck();
+        deck = CardManager.createNewDeck();
+        shuffleDeck();
         initPiles();
         dealCards();
     }
@@ -162,7 +169,7 @@ public class Game extends Pane {
         discardPile.setLayoutY(20);
         getChildren().add(discardPile);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < FOUNDATIONS; i++) {
             Pile foundationPile = new Pile(Pile.PileType.FOUNDATION, "Foundation " + i, FOUNDATION_GAP);
             foundationPile.setBlurredBackground();
             foundationPile.setLayoutX(610 + i * 180);
@@ -170,7 +177,7 @@ public class Game extends Pane {
             foundationPiles.add(foundationPile);
             getChildren().add(foundationPile);
         }
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < TABLEAUS; i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
             tableauPile.setBlurredBackground();
             tableauPile.setLayoutX(95 + i * 180);
@@ -180,9 +187,23 @@ public class Game extends Pane {
         }
     }
 
+    public void shuffleDeck() {
+        Collections.shuffle(this.deck);
+    }
+
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
+
+        for (int i = 0; i < TABLEAUS; i++) {
+            int nCards = i + 1;
+            for (int j = 0; j < nCards; j++) {
+                Card card = deckIterator.next();
+                tableauPiles.get(i).addCard(card);
+                addMouseEventHandlers(card);
+                getChildren().add(card);
+            }
+        }
+
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);
