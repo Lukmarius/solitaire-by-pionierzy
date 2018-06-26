@@ -42,11 +42,25 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
-            card.moveToPile(discardPile);
-            card.flip();
-            card.setMouseTransparent(false);
-            System.out.println("Placed " + card + " to the waste.");
+        if (e.getClickCount() == 2 && !e.isConsumed()) {
+            e.consume();
+            System.out.println("this should print on double click");
+
+            for (Pile pile: foundationPiles) {
+                Card topCard = pile.getTopCard();
+                if (topCard.getSuit().equals(card.getSuit())) {
+                    card.moveToPile(pile);
+                    break;
+                }
+            }
+        }
+        else {
+            if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+                card.moveToPile(discardPile);
+                card.flip();
+                card.setMouseTransparent(false);
+                System.out.println("Placed " + card + " to the waste.");
+            }
         }
     };
 
