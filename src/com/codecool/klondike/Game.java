@@ -14,7 +14,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game extends Pane {
@@ -38,7 +37,8 @@ public class Game extends Pane {
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
-    private static int themeNumber = 0;
+    private static int currentThemeNumber = 0;
+    private static int allThemes = 2; // = numOfFiles() method if worked
 
     public void setThemeButton(){
         Button switchThemeButton = new Button("Theme");
@@ -52,24 +52,25 @@ public class Game extends Pane {
     }
 
     private void switchTheme() {
-        if (themeNumber < numOfFiles() - 1){
-            themeNumber++;
+        if (currentThemeNumber < allThemes - 1){
+            currentThemeNumber++;
         } else {
-            themeNumber = 0;
+            currentThemeNumber = 0;
         }
-        CardManager.loadCardImages("card_images" + themeNumber);
+        CardManager.loadCardImages("card_images" + currentThemeNumber);
         for (Card card : this.deck) {
             card.setFrontFace();
         }
-        setTableBackground(new Image("/table/bg" + themeNumber));
+        setTableBackground(new Image("/table/bg" + currentThemeNumber));
     }
 
-    private int numOfFiles(){
-        File dir = new File("/home/mariusz/IdeaProjects/oop-solitaire/resources/table");
-        int numberOfSubfolders = 0;
-        File listDir[] = dir.listFiles();
-        return listDir.length;
-    }
+    // This method should count number of files in the directory, but path contains user name
+//    private int numOfFiles(){
+//        File dir = new File("/home/mariusz/IdeaProjects/oop-solitaire/resources/table");
+//        int numberOfSubfolders = 0;
+//        File listDir[] = dir.listFiles();
+//        return listDir.length;
+//    }
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
