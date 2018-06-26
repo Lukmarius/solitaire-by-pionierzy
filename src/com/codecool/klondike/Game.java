@@ -13,7 +13,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
-import java.io.File;
 import java.util.*;
 
 public class Game extends Pane {
@@ -37,32 +36,56 @@ public class Game extends Pane {
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
-    private static int currentThemeNumber = 0;
-    private static int allThemes = 2; // = numOfFiles() method if worked
+    private static int currentBackgroundThemeNumber = 0;
+    private static int allBgThemes = 5; // = numOfFiles() method if worked
+    private static int currentCardThemeNumber = 0;
+    private static int allCardThemes = 2;
 
     public void setThemeButton(){
-        Button switchThemeButton = new Button("Theme");
-        switchThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+        // Background theme:
+        Button switchBgThemeButton = new Button("Background");
+        switchBgThemeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                switchTheme();
+                switchBackgroundTheme();
             }
         });
-        getChildren().add(switchThemeButton);
+        getChildren().add(switchBgThemeButton);
+
+        // Card Theme:
+        Button switchCardThemeButton = new Button("Cards");
+        switchCardThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                switchCardTheme();
+            }
+        });
+        getChildren().add(switchCardThemeButton);
+        switchCardThemeButton.setLayoutY(260);
     }
 
-    private void switchTheme() {
-        if (currentThemeNumber < allThemes - 1){
-            currentThemeNumber++;
+    private void switchBackgroundTheme() {
+        if (currentBackgroundThemeNumber < allBgThemes - 1){
+            currentBackgroundThemeNumber++;
         } else {
-            currentThemeNumber = 0;
+            currentBackgroundThemeNumber = 0;
         }
-        CardManager.loadCardImages("card_images" + currentThemeNumber);
+        setTableBackground(new Image("/table/bg" + currentBackgroundThemeNumber));
+    }
+
+    private void switchCardTheme(){
+        if (currentCardThemeNumber < allCardThemes - 1){
+            currentCardThemeNumber++;
+        } else {
+            currentCardThemeNumber = 0;
+        }
+        CardManager.loadCardImages("card_images" + currentCardThemeNumber);
         for (Card card : this.deck) {
             card.setFrontFace();
         }
-        setTableBackground(new Image("/table/bg" + currentThemeNumber));
     }
+
+
 
     // This method should count number of files in the directory, but path contains user name
 //    private int numOfFiles(){
