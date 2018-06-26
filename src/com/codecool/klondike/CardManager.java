@@ -9,9 +9,7 @@ import java.util.Map;
 
 public class CardManager {
 
-    // Number of cards
-    public static final int MIN_RANK = 1;
-    public static final int MAX_RANK = 14;
+
 
     // Card images
     private static final String DEFAULT_URL = "card_images";
@@ -22,7 +20,7 @@ public class CardManager {
     public static List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
         for (Suit suit : Suit.values()) {
-            for (int rank = MIN_RANK; rank < MAX_RANK; rank++) {
+            for (Rank rank : Rank.values()) {
                 result.add(new Card(suit, rank, true));
             }
         }
@@ -37,7 +35,7 @@ public class CardManager {
     public static void loadCardImages(String baseUrl) {
         cardBackImage = new Image(baseUrl + "/card_back.png");
         for (Suit suit : Suit.values()) {
-            for (int rank = MIN_RANK; rank < MAX_RANK; rank++) {
+            for (Rank rank : Rank.values()) {
                 String cardName = suit.getName() + rank;
                 String cardId = "S" + suit.getValue() + "R" + rank;
                 String imageFileName = "card_images/" + cardName + ".png";
