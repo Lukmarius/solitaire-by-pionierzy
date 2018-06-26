@@ -40,8 +40,7 @@ public class Pile extends Pane {
     }
 
     public int numOfCards() {
-        //TODO
-        return 1;
+        return this.getCards().size();
     }
 
     public boolean isEmpty() {
@@ -49,7 +48,7 @@ public class Pile extends Pane {
     }
 
     public void clear() {
-        //TODO
+        this.cards = FXCollections.observableArrayList();
     }
 
     public void addCard(Card card) {
@@ -81,6 +80,10 @@ public class Pile extends Pane {
         GaussianBlur gaussianBlur = new GaussianBlur(10);
         setBackground(background);
         setEffect(gaussianBlur);
+    }
+
+    public void flipTopCard(){
+        this.getTopCard().flip();
     }
 
     public enum PileType {

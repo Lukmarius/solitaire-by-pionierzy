@@ -73,11 +73,32 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
-            card.moveToPile(discardPile);
-            card.flip();
-            card.setMouseTransparent(false);
-            System.out.println("Placed " + card + " to the waste.");
+        if (e.getClickCount() == 2 && !e.isConsumed()) {
+            e.consume();
+
+            for (Pile pile: foundationPiles) {
+                Card topCard = pile.getTopCard();
+                if (topCard == null) {
+                    if (card.getRank().equals(Rank.Ace)) card.moveToPile(pile);
+                    break;
+                }
+                else {
+                    int topRank = topCard.getRank().getValue();
+                    int cardRank = card.getRank().getValue();
+                    if (topCard.getSuit().equals(card.getSuit()) && topRank == cardRank - 1) {
+                        card.moveToPile(pile);
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+                card.moveToPile(discardPile);
+                card.flip();
+                card.setMouseTransparent(false);
+                System.out.println("Placed " + card + " to the waste.");
+            }
         }
     };
 
@@ -120,7 +141,7 @@ public class Game extends Pane {
             handleValidMove(card, pile);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            draggedCards = FXCollections.observableArrayList();
         }
     };
 

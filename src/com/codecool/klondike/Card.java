@@ -10,7 +10,7 @@ import java.util.*;
 public class Card extends ImageView {
 
     private Suit suit;
-    private int rank;
+    private Rank rank;
     private boolean faceDown;
 
     private Image backFace;
@@ -21,7 +21,7 @@ public class Card extends ImageView {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
 
-    public Card(Suit suit, int rank, boolean faceDown) {
+    public Card(Suit suit, Rank rank, boolean faceDown) {
         this.suit = suit;
         this.rank = rank;
         this.faceDown = faceDown;
@@ -42,15 +42,15 @@ public class Card extends ImageView {
     }
 
     public Suit getSuit() {
-        return suit;
+        return this.suit;
     }
 
-    public int getRank() {
-        return rank;
+    public Rank getRank() {
+        return this.rank;
     }
 
     public boolean isFaceDown() {
-        return faceDown;
+        return this.faceDown;
     }
 
     public String getShortName() {
@@ -58,11 +58,11 @@ public class Card extends ImageView {
     }
 
     public DropShadow getDropShadow() {
-        return dropShadow;
+        return this.dropShadow;
     }
 
     public Pile getContainingPile() {
-        return containingPile;
+        return this.containingPile;
     }
 
     public void setContainingPile(Pile containingPile) {
@@ -70,7 +70,12 @@ public class Card extends ImageView {
     }
 
     public void moveToPile(Pile destPile) {
-        this.getContainingPile().getCards().remove(this);
+        Pile containingPile = this.getContainingPile();
+
+        containingPile.getCards().remove(this);
+        if(!containingPile.isEmpty() && containingPile.getTopCard().faceDown && containingPile.getPileType()==Pile.PileType.TABLEAU) {
+            this.getContainingPile().flipTopCard();
+        }
         destPile.addCard(this);
     }
 
