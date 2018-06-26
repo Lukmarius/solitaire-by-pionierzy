@@ -52,7 +52,9 @@ public class Game extends Pane {
                     break;
                 }
                 else {
-                    if (topCard.getSuit().equals(card.getSuit()) && topCard.getRank().equals(card.getRank())) {
+                    int topRank = topCard.getRank().getValue();
+                    int cardRank = card.getRank().getValue();
+                    if (topCard.getSuit().equals(card.getSuit()) && topRank == cardRank - 1) {
                         card.moveToPile(pile);
                         break;
                     }

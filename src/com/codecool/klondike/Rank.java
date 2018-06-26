@@ -12,6 +12,10 @@ public enum Rank {
         this.value = value;
     }
 
+    public int getValue () {
+        return this.value;
+    }
+
 
     @Override
     public String toString() {
