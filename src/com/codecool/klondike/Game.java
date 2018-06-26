@@ -44,13 +44,18 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         if (e.getClickCount() == 2 && !e.isConsumed()) {
             e.consume();
-            System.out.println("this should print on double click");
 
             for (Pile pile: foundationPiles) {
                 Card topCard = pile.getTopCard();
-                if (topCard.getSuit().equals(card.getSuit()) && topCard.getRank().equals(card.getRank())) {
-                    card.moveToPile(pile);
+                if (topCard == null) {
+                    if (card.getRank().equals(Rank.Ace)) card.moveToPile(pile);
                     break;
+                }
+                else {
+                    if (topCard.getSuit().equals(card.getSuit()) && topCard.getRank().equals(card.getRank())) {
+                        card.moveToPile(pile);
+                        break;
+                    }
                 }
             }
         }

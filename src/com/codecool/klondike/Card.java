@@ -33,15 +33,15 @@ public class Card extends ImageView {
     }
 
     public Suit getSuit() {
-        return suit;
+        return this.suit;
     }
 
     public Rank getRank() {
-        return rank;
+        return this.rank;
     }
 
     public boolean isFaceDown() {
-        return faceDown;
+        return this.faceDown;
     }
 
     public String getShortName() {
@@ -49,11 +49,11 @@ public class Card extends ImageView {
     }
 
     public DropShadow getDropShadow() {
-        return dropShadow;
+        return this.dropShadow;
     }
 
     public Pile getContainingPile() {
-        return containingPile;
+        return this.containingPile;
     }
 
     public void setContainingPile(Pile containingPile) {
