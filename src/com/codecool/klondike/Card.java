@@ -29,7 +29,16 @@ public class Card extends ImageView {
         backFace = CardManager.getCardBackImage();
         frontFace = CardManager.getCardFaceImage(this.getShortName());
         setImage(faceDown ? backFace : frontFace);
+        this.setFitHeight(HEIGHT);
+        this.setFitWidth(WIDTH);
         setEffect(dropShadow);
+    }
+
+    public void setFrontFace() {
+        this.frontFace = CardManager.getCardFaceImage(this.getShortName());
+        setImage(faceDown ? backFace : frontFace);
+        this.setFitHeight(HEIGHT);
+        this.setFitWidth(WIDTH);
     }
 
     public Suit getSuit() {

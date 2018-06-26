@@ -14,7 +14,7 @@ public class CardManager {
     public static final int MAX_RANK = 14;
 
     // Card images
-    private static final String DEFAULT_URL = "card_images";
+    private static final String DEFAULT_URL = "card_images0";
     private static Image cardBackImage;
     private static Map<String, Image> cardFaceImages = new HashMap<>();
 
@@ -40,7 +40,7 @@ public class CardManager {
             for (int rank = MIN_RANK; rank < MAX_RANK; rank++) {
                 String cardName = suit.getName() + rank;
                 String cardId = "S" + suit.getValue() + "R" + rank;
-                String imageFileName = "card_images/" + cardName + ".png";
+                String imageFileName = baseUrl + "/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
         }

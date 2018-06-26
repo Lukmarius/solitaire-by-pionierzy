@@ -1,9 +1,9 @@
 package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -13,10 +13,9 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.io.File;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Game extends Pane {
 
@@ -39,6 +38,38 @@ public class Game extends Pane {
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
 
+    private static int themeNumber = 0;
+
+    public void setThemeButton(){
+        Button switchThemeButton = new Button("Theme");
+        switchThemeButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                switchTheme();
+            }
+        });
+        getChildren().add(switchThemeButton);
+    }
+
+    private void switchTheme() {
+        if (themeNumber < numOfFiles() - 1){
+            themeNumber++;
+        } else {
+            themeNumber = 0;
+        }
+        CardManager.loadCardImages("card_images" + themeNumber);
+        for (Card card : this.deck) {
+            card.setFrontFace();
+        }
+        setTableBackground(new Image("/table/bg" + themeNumber));
+    }
+
+    private int numOfFiles(){
+        File dir = new File("/home/mariusz/IdeaProjects/oop-solitaire/resources/table");
+        int numberOfSubfolders = 0;
+        File listDir[] = dir.listFiles();
+        return listDir.length;
+    }
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
@@ -99,6 +130,7 @@ public class Game extends Pane {
     }
 
     public Game() {
+        setThemeButton();
         deck = CardManager.createNewDeck();
         shuffleDeck();
         initPiles();
