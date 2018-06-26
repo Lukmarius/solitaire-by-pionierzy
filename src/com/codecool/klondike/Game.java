@@ -41,6 +41,10 @@ public class Game extends Pane {
 
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
+        if (e.getClickCount() == 2 && !e.isConsumed()) {
+            e.consume();
+            System.out.println("this should print on double click");
+        }
         Card card = (Card) e.getSource();
         if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
             card.moveToPile(discardPile);
