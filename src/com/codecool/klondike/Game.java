@@ -103,6 +103,7 @@ public class Game extends Pane {
         shuffleDeck();
         initPiles();
         dealCards();
+        flipTopCards();
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -210,6 +211,12 @@ public class Game extends Pane {
             getChildren().add(card);
         });
 
+    }
+
+    public void flipTopCards() {
+        for (Pile pile : this.tableauPiles) {
+            pile.getTopCard().flip();
+        }
     }
 
     public void setTableBackground(Image tableBackground) {
