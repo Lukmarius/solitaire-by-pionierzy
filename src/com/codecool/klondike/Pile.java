@@ -82,6 +82,10 @@ public class Pile extends Pane {
         setEffect(gaussianBlur);
     }
 
+    public void flipTopCard(){
+        this.getTopCard().flip();
+    }
+
     public enum PileType {
         STOCK,
         DISCARD,
