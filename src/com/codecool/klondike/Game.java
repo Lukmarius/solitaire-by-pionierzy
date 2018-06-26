@@ -48,7 +48,7 @@ public class Game extends Pane {
 
             for (Pile pile: foundationPiles) {
                 Card topCard = pile.getTopCard();
-                if (topCard.getSuit().equals(card.getSuit())) {
+                if (topCard.getSuit().equals(card.getSuit()) && topCard.getRank().equals(card.getRank())) {
                     card.moveToPile(pile);
                     break;
                 }
