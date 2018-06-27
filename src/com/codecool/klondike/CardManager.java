@@ -51,4 +51,13 @@ public class CardManager {
     public static Image getCardFaceImage(String cardId) {
         return cardFaceImages.get(cardId);
     }
+
+    public static boolean checkIfLowerRankOpposingColor (Card card, Pile pile) {
+        int topRank = pile.getTopCard().getRank().getValue();
+        int cardRank = card.getRank().getValue();
+
+        Suit.Color topColor = pile.getTopCard().getSuit().getColor();
+        Suit.Color cardColor = card.getSuit().getColor();
+        return (topRank == cardRank + 1 && topColor != cardColor);
+    }
 }

@@ -161,7 +161,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
         //TODO
-        if (pile != null) {
+        if (pile != null && CardManager.checkIfLowerRankOpposingColor(card, pile)) {
             handleValidMove(card, pile);
         } else {
             Pile foundationPile = getValidIntersectingPile(card, foundationPiles);
