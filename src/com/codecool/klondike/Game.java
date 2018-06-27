@@ -164,6 +164,10 @@ public class Game extends Pane {
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
+            Pile foundationPile = getValidIntersectingPile(card, foundationPiles);
+            if (foundationPile != null) {
+                handleValidMove(card, foundationPile);
+            }
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards = FXCollections.observableArrayList();
         }
