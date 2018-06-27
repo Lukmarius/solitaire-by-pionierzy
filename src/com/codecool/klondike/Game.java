@@ -96,7 +96,7 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (e.getClickCount() == 2 && !e.isConsumed()) {
+        if (e.getClickCount() == 2 && !e.isConsumed() && !card.isFaceDown()) {
             e.consume();
 
             for (Pile pile : foundationPiles) {
@@ -170,12 +170,17 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, tableauPiles);
         //TODO
-        if (pile != null && CardManager.checkIfLowerRankOpposingColor(card, pile)) {
-            handleValidMove(card, pile);
+        if (pile != null) {
+            if (CardManager.checkIfLowerRankOpposingColor(card, pile)) handleValidMove(card, pile);
         } else {
             Pile foundationPile = getValidIntersectingPile(card, foundationPiles);
-            if (foundationPile != null) { // tu trzeba wstawić checker czy ten sam kolor i figura o jeden wyższa
-                handleValidMove(card, foundationPile);
+            if (foundationPile != null) {
+                if (foundationPile.getTopCard() != null) {
+                    if (CardManager.checkIfHigherRankSameSuit(card, foundationPile)) handleValidMove(card, foundationPile);
+                }
+                else {
+                    if (card.getRank().equals(Rank.Ace)) handleValidMove(card, foundationPile);
+                }
             }
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards = FXCollections.observableArrayList();
