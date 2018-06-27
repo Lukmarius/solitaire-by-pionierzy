@@ -55,9 +55,13 @@ public class CardManager {
     public static boolean checkIfLowerRankOpposingColor (Card card, Pile pile) {
         int topRank = pile.getTopCard().getRank().getValue();
         int cardRank = card.getRank().getValue();
-
+        System.out.println(topRank);
+        System.out.println(cardRank);
         Suit.Color topColor = pile.getTopCard().getSuit().getColor();
         Suit.Color cardColor = card.getSuit().getColor();
+        System.out.println(topColor);
+        System.out.println(cardColor);
+
         return (topRank == cardRank + 1 && topColor != cardColor);
     }
 }
