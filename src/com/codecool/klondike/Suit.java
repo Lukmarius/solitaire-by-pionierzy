@@ -3,8 +3,8 @@ package com.codecool.klondike;
 public enum Suit {
     SPADES (1, "spades", Color.BLACK),
     HEARTS (2, "hearts", Color.RED),
-    DIAMONDS (3, "diamonds", Color.BLACK),
-    CLUBS (4, "clubs", Color.RED);
+    DIAMONDS (3, "diamonds", Color.RED),
+    CLUBS (4, "clubs", Color.BLACK);
 
     private final int value;
     private final String name;
