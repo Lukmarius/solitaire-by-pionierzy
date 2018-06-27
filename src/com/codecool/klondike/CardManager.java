@@ -10,7 +10,6 @@ import java.util.Map;
 public class CardManager {
 
 
-
     // Card images
     private static final String DEFAULT_URL = "card_images0";
     private static Image cardBackImage;
@@ -52,16 +51,21 @@ public class CardManager {
         return cardFaceImages.get(cardId);
     }
 
-    public static boolean checkIfLowerRankOpposingColor (Card card, Pile pile) {
+    public static boolean checkIfLowerRankOpposingColor(Card card, Pile pile) {
         int topRank = pile.getTopCard().getRank().getValue();
         int cardRank = card.getRank().getValue();
-        System.out.println(topRank);
-        System.out.println(cardRank);
         Suit.Color topColor = pile.getTopCard().getSuit().getColor();
         Suit.Color cardColor = card.getSuit().getColor();
-        System.out.println(topColor);
-        System.out.println(cardColor);
 
         return (topRank == cardRank + 1 && !topColor.equals(cardColor));
+    }
+
+    public static boolean checkIfHigherRankSameSuit(Card card, Pile pile) {
+        int topRank = pile.getTopCard().getRank().getValue();
+        int cardRank = card.getRank().getValue();
+        Suit topSuit = pile.getTopCard().getSuit();
+        Suit cardSuit = card.getSuit();
+
+        return (topRank == cardRank - 1 && topSuit.equals(cardSuit));
     }
 }

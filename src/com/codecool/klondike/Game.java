@@ -41,7 +41,7 @@ public class Game extends Pane {
     private static int currentCardThemeNumber = 0;
     private static int allCardThemes = 2;
 
-    public void setThemeButton(){
+    public void setThemeButton() {
         // Background theme:
         Button switchBgThemeButton = new Button("Background");
         switchBgThemeButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,7 +65,7 @@ public class Game extends Pane {
     }
 
     private void switchBackgroundTheme() {
-        if (currentBackgroundThemeNumber < allBgThemes - 1){
+        if (currentBackgroundThemeNumber < allBgThemes - 1) {
             currentBackgroundThemeNumber++;
         } else {
             currentBackgroundThemeNumber = 0;
@@ -73,8 +73,8 @@ public class Game extends Pane {
         setTableBackground(new Image("/table/bg" + currentBackgroundThemeNumber));
     }
 
-    private void switchCardTheme(){
-        if (currentCardThemeNumber < allCardThemes - 1){
+    private void switchCardTheme() {
+        if (currentCardThemeNumber < allCardThemes - 1) {
             currentCardThemeNumber++;
         } else {
             currentCardThemeNumber = 0;
@@ -84,7 +84,6 @@ public class Game extends Pane {
             card.setFrontFace();
         }
     }
-
 
 
     // This method should count number of files in the directory, but path contains user name
@@ -100,13 +99,12 @@ public class Game extends Pane {
         if (e.getClickCount() == 2 && !e.isConsumed()) {
             e.consume();
 
-            for (Pile pile: foundationPiles) {
+            for (Pile pile : foundationPiles) {
                 Card topCard = pile.getTopCard();
                 if (topCard == null) {
                     if (card.getRank().equals(Rank.Ace)) card.moveToPile(pile);
                     break;
-                }
-                else {
+                } else {
                     int topRank = topCard.getRank().getValue();
                     int cardRank = card.getRank().getValue();
                     if (topCard.getSuit().equals(card.getSuit()) && topRank == cardRank - 1) {
@@ -115,8 +113,7 @@ public class Game extends Pane {
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
                 card.moveToPile(discardPile);
                 card.flip();
@@ -215,6 +212,7 @@ public class Game extends Pane {
         //TODO
         return true;
     }
+
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
         Pile result = null;
         for (Pile pile : piles) {

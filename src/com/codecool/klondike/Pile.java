@@ -82,7 +82,7 @@ public class Pile extends Pane {
         setEffect(gaussianBlur);
     }
 
-    public void flipTopCard(){
+    public void flipTopCard() {
         this.getTopCard().flip();
     }
 

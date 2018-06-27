@@ -73,7 +73,7 @@ public class Card extends ImageView {
         Pile containingPile = this.getContainingPile();
 
         containingPile.getCards().remove(this);
-        if(!containingPile.isEmpty() && containingPile.getTopCard().faceDown && containingPile.getPileType()==Pile.PileType.TABLEAU) {
+        if (!containingPile.isEmpty() && containingPile.getTopCard().faceDown && containingPile.getPileType() == Pile.PileType.TABLEAU) {
             this.getContainingPile().flipTopCard();
         }
         destPile.addCard(this);
