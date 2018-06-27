@@ -138,13 +138,25 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK || !card.equals(activePile.getTopCard()))
+        if (activePile.getPileType() == Pile.PileType.STOCK)
             return;
+        if (card.isFaceDown()) {
+            return;
+        }
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
+        ListIterator<Card> it = activePile.getCards().listIterator();
+        Card currentCard = it.hasNext() ? it.next() : null;
+        while (currentCard != null && !card.equals(currentCard)) {
+            currentCard = it.next();
+        }
         draggedCards.add(card);
+        while (it.hasNext()) {
+            currentCard = it.next();
+            draggedCards.add(currentCard);
+        }
 
         card.getDropShadow().setRadius(20);
         card.getDropShadow().setOffsetX(10);
@@ -165,7 +177,7 @@ public class Game extends Pane {
             handleValidMove(card, pile);
         } else {
             Pile foundationPile = getValidIntersectingPile(card, foundationPiles);
-            if (foundationPile != null) {
+            if (foundationPile != null) { // tu trzeba wstawić checker czy ten sam kolor i figura o jeden wyższa
                 handleValidMove(card, foundationPile);
             }
             draggedCards.forEach(MouseUtil::slideBack);

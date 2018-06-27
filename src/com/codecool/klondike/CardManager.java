@@ -62,6 +62,6 @@ public class CardManager {
         System.out.println(topColor);
         System.out.println(cardColor);
 
-        return (topRank == cardRank + 1 && topColor != cardColor);
+        return (topRank == cardRank + 1 && !topColor.equals(cardColor));
     }
 }
