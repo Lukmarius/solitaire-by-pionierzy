@@ -182,9 +182,9 @@ public class Game extends Pane {
                     if (card.getRank().equals(Rank.Ace)) handleValidMove(card, foundationPile);
                 }
             }
-            draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = FXCollections.observableArrayList();
         }
+        draggedCards.forEach(MouseUtil::slideBack);
+        draggedCards = FXCollections.observableArrayList();
     };
 
     public boolean isGameWon() {
