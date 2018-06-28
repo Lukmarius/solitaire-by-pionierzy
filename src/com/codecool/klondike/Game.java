@@ -3,6 +3,7 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -116,7 +117,8 @@ public class Game extends Pane {
         if (pile != null) {
             handleValidMove(card, pile);
         } else {
-            draggedCards.forEach(MouseUtil::slideBack);
+            MouseUtil.slideBack(draggedCards.get(0));
+            draggedCards.forEach(Node::toFront);
             draggedCards = FXCollections.observableArrayList();
         }
     };
