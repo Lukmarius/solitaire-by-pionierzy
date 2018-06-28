@@ -33,7 +33,7 @@ public class Game extends Pane {
     private List<Card> draggedCards = FXCollections.observableArrayList();
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (e.getClickCount() == 2 && !e.isConsumed() && !card.isFaceDown()) {
+        if (e.getClickCount() == 2 && !e.isConsumed() && card.equals(card.getContainingPile().getTopCard())) {
             e.consume();
 
             for (Pile pile : foundationPiles) {
