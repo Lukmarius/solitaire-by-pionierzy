@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -170,7 +171,7 @@ public class Game extends Pane {
         Button replay = new Button("Play again");
         replay.setOnAction(event -> switchBackgroundTheme());
         Button exit = new Button("Exit game");
-        exit.setOnAction(event -> switchBackgroundTheme());
+        exit.setOnAction(event -> Platform.exit());
 
         dialogStage.initModality(Modality.APPLICATION_MODAL);
         VBox vbox = new VBox(new Text("You won!"),replay,exit);
@@ -208,6 +209,9 @@ public class Game extends Pane {
             if(pile.numOfCards() > 0) return true;
         }
         return false;
+        /*   if(pile.numOfCards() < 13) return false;
+        }
+        return true;*/
     }
 
     public void addMouseEventHandlers(Card card) {
