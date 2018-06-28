@@ -25,6 +25,7 @@ public class Game extends Pane {
     private List<Pile> foundationPiles = FXCollections.observableArrayList();
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
 
+
     // Number of piles
     private static final int FOUNDATIONS = Suit.values().length;
     private static final int TABLEAUS = 7;
@@ -167,24 +168,18 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
         if (draggedCards.isEmpty())
             return;
+
         Card card = (Card) e.getSource();
-        Pile pile = getValidIntersectingPile(card, tableauPiles);
+        Pile pile = getValidIntersectingPile(card, foundationPiles);
         //TODO
         if (pile != null) {
-            if (CardManager.checkIfLowerRankOpposingColor(card, pile)) handleValidMove(card, pile);
-        } else {
-            Pile foundationPile = getValidIntersectingPile(card, foundationPiles);
-            if (foundationPile != null) {
-                if (foundationPile.getTopCard() != null) {
-                    if (CardManager.checkIfHigherRankSameSuit(card, foundationPile)) handleValidMove(card, foundationPile);
-                }
-                else {
-                    if (card.getRank().equals(Rank.Ace)) handleValidMove(card, foundationPile);
-                }
-            }
+           handleValidMove(card, pile);
         }
-        draggedCards.forEach(MouseUtil::slideBack);
-        draggedCards = FXCollections.observableArrayList();
+        else {
+            draggedCards.forEach(MouseUtil::slideBack);
+            draggedCards = FXCollections.observableArrayList();
+        }
+
     };
 
     public boolean isGameWon() {
@@ -215,7 +210,14 @@ public class Game extends Pane {
 
     public boolean isMoveValid(Card card, Pile destPile) {
         //TODO
-        return true;
+        if (destPile.getPileType() == Pile.PileType.TABLEAU) {
+            if (destPile.isEmpty() && card.getRank().equals(Rank.King)) return true;
+            else return CardManager.checkIfLowerRankOpposingColor(card, destPile);
+        } else if (destPile.getPileType() == Pile.PileType.FOUNDATION) {
+            if (destPile.isEmpty() && card.getRank() == Rank.Ace) return true;
+            else if(!destPile.isEmpty()) return CardManager.checkIfHigherRankSameSuit(card, destPile);
+        }
+        return false;
     }
 
     private Pile getValidIntersectingPile(Card card, List<Pile> piles) {
