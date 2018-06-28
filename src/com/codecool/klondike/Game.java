@@ -47,14 +47,14 @@ public class Game extends Pane {
                 Card topCard = pile.getTopCard();
                 if (topCard == null) {
                     if (card.getRank().equals(Rank.Ace)) card.moveToPile(pile);
-                    isGameWon();
+                    if (isGameWon()) setWinPopup();
                     break;
                 } else {
                     int topRank = topCard.getRank().getValue();
                     int cardRank = card.getRank().getValue();
                     if (topCard.getSuit().equals(card.getSuit()) && topRank == cardRank - 1) {
                         card.moveToPile(pile);
-                        isGameWon();
+                        if (isGameWon()) setWinPopup();
                         break;
                     }
                 }
@@ -201,12 +201,12 @@ public class Game extends Pane {
         }
     }
 
-    public void isGameWon() {
+    public boolean isGameWon() {
         //TODO
         for(Pile pile:foundationPiles){
-            if(pile.numOfCards() < 13) return;
+            if(pile.numOfCards() > 0) return true;
         }
-        setWinPopup();
+        return false;
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -267,7 +267,7 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
-        isGameWon();
+        if (isGameWon()) setWinPopup();
     }
 
 
