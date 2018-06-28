@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.*;
 
@@ -39,7 +40,6 @@ public class Game extends Pane {
     private List<Pile> placeablePiles = FXCollections.observableArrayList();
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
-
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         if (e.getClickCount() == 2 && !e.isConsumed() && card.equals(card.getContainingPile().getTopCard()) && !card.isFaceDown()) {
@@ -49,14 +49,14 @@ public class Game extends Pane {
                 Card topCard = pile.getTopCard();
                 if (topCard == null) {
                     if (card.getRank().equals(Rank.Ace)) card.moveToPile(pile);
-                    if (isGameWon()) setWinPopup();
+                    isGameWon();
                     break;
                 } else {
                     int topRank = topCard.getRank().getValue();
                     int cardRank = card.getRank().getValue();
                     if (topCard.getSuit().equals(card.getSuit()) && topRank == cardRank - 1) {
                         card.moveToPile(pile);
-                        if (isGameWon()) setWinPopup();
+                        isGameWon();
                         break;
                     }
                 }
@@ -73,7 +73,6 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
         refillStockFromDiscard();
     };
-    
     private EventHandler<MouseEvent> onMousePressedHandler = e -> {
         dragStartX = e.getSceneX();
         dragStartY = e.getSceneY();
@@ -87,16 +86,18 @@ public class Game extends Pane {
 //        File listDir[] = dir.listFiles();
 //        return listDir.length;
 //    }
-
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK || card.isFaceDown() || activePile.getPileType() == Pile.PileType.FOUNDATION)
+        if (activePile.getPileType() == Pile.PileType.STOCK)
             return;
-
+        if (card.isFaceDown()) {
+            return;
+        }
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
+        draggedCards.clear();
         ListIterator<Card> it = activePile.getCards().listIterator();
         Card currentCard = it.hasNext() ? it.next() : null;
         while (currentCard != null && !card.equals(currentCard)) {
@@ -116,7 +117,6 @@ public class Game extends Pane {
         card.setTranslateX(offsetX);
         card.setTranslateY(offsetY);
     };
-
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
         if (draggedCards.isEmpty())
             return;
@@ -124,7 +124,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, placeablePiles);
         //TODO
-        if (pile != null && !card.getContainingPile().equals(pile)) {
+        if (pile != null) {
             handleValidMove(card, pile);
         } else {
             MouseUtil.slideBack(draggedCards.get(0));
@@ -165,18 +165,21 @@ public class Game extends Pane {
         switchCardThemeButton.setLayoutY(260);
     }
 
-    public void setWinPopup(){
+    public void setWinPopup() {
 
         Stage dialogStage = new Stage();
-        Button replay = new Button("Play again");
-        replay.setOnAction(event -> switchBackgroundTheme());
-        Button exit = new Button("Exit game");
-        exit.setOnAction(event -> Platform.exit());
-
         dialogStage.initModality(Modality.APPLICATION_MODAL);
-        VBox vbox = new VBox(new Text("You won!"),replay,exit);
+        dialogStage.initStyle(StageStyle.UNDECORATED);
+
+        Button replayBtn = new Button("Play again");
+        replayBtn.setOnAction(event -> switchBackgroundTheme());
+        Button exitBtn = new Button("Exit game");
+        exitBtn.setOnAction(event -> Platform.exit());
+
+        VBox vbox = new VBox(new Text("You won!"), replayBtn, exitBtn);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(25));
+        vbox.setSpacing(15);
 
         dialogStage.setScene(new Scene(vbox));
         dialogStage.show();
@@ -203,15 +206,12 @@ public class Game extends Pane {
         }
     }
 
-    public boolean isGameWon() {
+    public void isGameWon() {
         //TODO
-        for(Pile pile:foundationPiles){
-            if(pile.numOfCards() > 0) return true;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() < 13) return;
         }
-        return false;
-        /*   if(pile.numOfCards() < 13) return false;
-        }
-        return true;*/
+        setWinPopup();
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -272,7 +272,7 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
-        if (isGameWon()) setWinPopup();
+        isGameWon();
     }
 
 
