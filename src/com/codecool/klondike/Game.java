@@ -165,7 +165,7 @@ public class Game extends Pane {
         switchCardThemeButton.setLayoutY(260);
     }
 
-    public void setWinPopup(){
+    public void setWinPopup() {
 
         Stage dialogStage = new Stage();
         dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -176,7 +176,7 @@ public class Game extends Pane {
         Button exitBtn = new Button("Exit game");
         exitBtn.setOnAction(event -> Platform.exit());
 
-        VBox vbox = new VBox(new Text("You won!"),replayBtn,exitBtn);
+        VBox vbox = new VBox(new Text("You won!"), replayBtn, exitBtn);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(25));
         vbox.setSpacing(15);
@@ -208,8 +208,8 @@ public class Game extends Pane {
 
     public void isGameWon() {
         //TODO
-        for(Pile pile:foundationPiles){
-            if(pile.numOfCards() < 13) return;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() < 13) return;
         }
         setWinPopup();
     }
@@ -223,7 +223,7 @@ public class Game extends Pane {
 
 
     public void refillStockFromDiscard() {
-        for(int i=discardPile.numOfCards()-1;i>0;i--){
+        for (int i = discardPile.numOfCards() - 1; i > 0; i--) {
             discardPile.getCards().get(i).flip();
             discardPile.getCards().get(i).moveToPile(stockPile);
         }
