@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.*;
 
@@ -166,15 +168,18 @@ public class Game extends Pane {
     public void setWinPopup(){
 
         Stage dialogStage = new Stage();
-        Button replay = new Button("Play again");
-        replay.setOnAction(event -> switchBackgroundTheme());
-        Button exit = new Button("Exit game");
-        exit.setOnAction(event -> switchBackgroundTheme());
-
         dialogStage.initModality(Modality.APPLICATION_MODAL);
-        VBox vbox = new VBox(new Text("You won!"),replay,exit);
+        dialogStage.initStyle(StageStyle.UNDECORATED);
+
+        Button replayBtn = new Button("Play again");
+        replayBtn.setOnAction(event -> switchBackgroundTheme());
+        Button exitBtn = new Button("Exit game");
+        exitBtn.setOnAction(event -> Platform.exit());
+
+        VBox vbox = new VBox(new Text("You won!"),replayBtn,exitBtn);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(25));
+        vbox.setSpacing(15);
 
         dialogStage.setScene(new Scene(vbox));
         dialogStage.show();
