@@ -38,6 +38,7 @@ public class Game extends Pane {
     private List<Pile> placeablePiles = FXCollections.observableArrayList();
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
+
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         if (e.getClickCount() == 2 && !e.isConsumed() && card.equals(card.getContainingPile().getTopCard()) && !card.isFaceDown()) {
@@ -71,6 +72,7 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
         refillStockFromDiscard();
     };
+    
     private EventHandler<MouseEvent> onMousePressedHandler = e -> {
         dragStartX = e.getSceneX();
         dragStartY = e.getSceneY();
@@ -84,18 +86,16 @@ public class Game extends Pane {
 //        File listDir[] = dir.listFiles();
 //        return listDir.length;
 //    }
+
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        if (activePile.getPileType() == Pile.PileType.STOCK || card.isFaceDown() || activePile.getPileType() == Pile.PileType.FOUNDATION)
             return;
-        if (card.isFaceDown()) {
-            return;
-        }
+
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
-        draggedCards.clear();
         ListIterator<Card> it = activePile.getCards().listIterator();
         Card currentCard = it.hasNext() ? it.next() : null;
         while (currentCard != null && !card.equals(currentCard)) {
@@ -115,6 +115,7 @@ public class Game extends Pane {
         card.setTranslateX(offsetX);
         card.setTranslateY(offsetY);
     };
+
     private EventHandler<MouseEvent> onMouseReleasedHandler = e -> {
         if (draggedCards.isEmpty())
             return;
@@ -122,7 +123,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile pile = getValidIntersectingPile(card, placeablePiles);
         //TODO
-        if (pile != null) {
+        if (pile != null && !card.getContainingPile().equals(pile)) {
             handleValidMove(card, pile);
         } else {
             MouseUtil.slideBack(draggedCards.get(0));
@@ -218,7 +219,7 @@ public class Game extends Pane {
 
 
     public void refillStockFromDiscard() {
-        for(int i=discardPile.numOfCards()-1;i>0;i--){
+        for (int i = discardPile.numOfCards() - 1; i > 0; i--) {
             discardPile.getCards().get(i).flip();
             discardPile.getCards().get(i).moveToPile(stockPile);
         }
