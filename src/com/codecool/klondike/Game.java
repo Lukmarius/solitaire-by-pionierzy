@@ -187,12 +187,14 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        for(int i=discardPile.numOfCards()-1;i>0;i--){
+            discardPile.getCards().get(i).flip();
+            discardPile.getCards().get(i).moveToPile(stockPile);
+        }
         System.out.println("Stock refilled from discard pile.");
     }
 
     public boolean isMoveValid(Card card, Pile destPile) {
-        //TODO
         if (destPile.getPileType() == Pile.PileType.TABLEAU) {
             if (destPile.isEmpty() && card.getRank().equals(Rank.King)) return true;
             else if (!destPile.isEmpty()) return CardManager.checkIfLowerRankOpposingColor(card, destPile);
