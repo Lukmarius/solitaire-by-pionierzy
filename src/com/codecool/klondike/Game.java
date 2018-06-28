@@ -3,11 +3,17 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -41,12 +47,14 @@ public class Game extends Pane {
                 Card topCard = pile.getTopCard();
                 if (topCard == null) {
                     if (card.getRank().equals(Rank.Ace)) card.moveToPile(pile);
+                    isGameWon();
                     break;
                 } else {
                     int topRank = topCard.getRank().getValue();
                     int cardRank = card.getRank().getValue();
                     if (topCard.getSuit().equals(card.getSuit()) && topRank == cardRank - 1) {
                         card.moveToPile(pile);
+                        isGameWon();
                         break;
                     }
                 }
@@ -155,6 +163,23 @@ public class Game extends Pane {
         switchCardThemeButton.setLayoutY(260);
     }
 
+    public void setWinPopup(){
+
+        Stage dialogStage = new Stage();
+        Button replay = new Button("Play again");
+        replay.setOnAction(event -> switchBackgroundTheme());
+        Button exit = new Button("Exit game");
+        exit.setOnAction(event -> switchBackgroundTheme());
+
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        VBox vbox = new VBox(new Text("You won!"),replay,exit);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(25));
+
+        dialogStage.setScene(new Scene(vbox));
+        dialogStage.show();
+    }
+
     private void switchBackgroundTheme() {
         if (currentBackgroundThemeNumber < allBgThemes - 1) {
             currentBackgroundThemeNumber++;
@@ -176,9 +201,12 @@ public class Game extends Pane {
         }
     }
 
-    public boolean isGameWon() {
+    public void isGameWon() {
         //TODO
-        return false;
+        for(Pile pile:foundationPiles){
+            if(pile.numOfCards() < 13) return;
+        }
+        setWinPopup();
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -187,6 +215,7 @@ public class Game extends Pane {
         card.setOnMouseReleased(onMouseReleasedHandler);
         card.setOnMouseClicked(onMouseClickedHandler);
     }
+
 
     public void refillStockFromDiscard() {
         for(int i=discardPile.numOfCards()-1;i>0;i--){
@@ -238,6 +267,7 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
+        isGameWon();
     }
 
 
