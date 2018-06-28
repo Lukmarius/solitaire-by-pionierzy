@@ -32,6 +32,7 @@ public class Game extends Pane {
     private List<Pile> placeablePiles = FXCollections.observableArrayList();
     private double dragStartX, dragStartY;
     private List<Card> draggedCards = FXCollections.observableArrayList();
+
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         if (e.getClickCount() == 2 && !e.isConsumed() && card.equals(card.getContainingPile().getTopCard()) && !card.isFaceDown()) {
@@ -79,11 +80,9 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        if (activePile.getPileType() == Pile.PileType.STOCK || card.isFaceDown())
             return;
-        if (card.isFaceDown()) {
-            return;
-        }
+        
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
 
